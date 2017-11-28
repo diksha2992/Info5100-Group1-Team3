@@ -1,12 +1,19 @@
 package Edit;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
@@ -15,10 +22,10 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
-public class EditIncentivesFrame {
+public class EditIncentivesFrame extends JFrame{
 
 	private JFrame frame;
-	private JTextField txtDiscount1;
+	private JTextField txtDiscount;
 	private JTextField txtEnterTitle;
 	private JTextField txtPrice;
 	private JTextField txtId;
@@ -26,6 +33,17 @@ public class EditIncentivesFrame {
 	private JTextField txtYear;
 	private JTextField txtMake;
 	private JTextField txtModel;
+	private JTextArea txtDescription;
+	private JTextArea txtDisclaimer;
+	private JComboBox cbCategory;
+	private JComboBox cbColor;
+	private JComboBox cbType;
+	private JComboBox cbTrim;
+	private JComboBox cbPrice;
+	private JComboBox cbMileage;
+	private JButton applyBtn;
+	
+	
 
 
 	public static void main(String[] args) {
@@ -39,13 +57,196 @@ public class EditIncentivesFrame {
 				}
 			}
 		});
+		
+		//readAndGetIncentives();---------ServiceTeam
+		showRecordsOnScreen();
+		//writeToFile();------------ServiceTeam
 	}
+
+
+	private static void showRecordsOnScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	private void applyClicked(MouseEvent e) {
+		try {
+			EditIncentives ei = getIncentive();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		frame.dispatchEvent(new WindowEvent(frame,WindowEvent.WINDOW_CLOSING) );
+		this.setVisible(false);
+	}
+	
+	private EditIncentives getIncentive() throws Exception{
+		String[] arr = {};
+		EditIncentives ei = new EditIncentives(arr);
+		StringBuilder sb = new StringBuilder();
+		
+		arr[0] = txtId.getText();
+		
+		arr[1] = txtEnterTitle.getText();
+		if(isNullOrEmpty(arr,1)) {
+			sb.append("Title should not be empty.");
+		}
+		
+		arr[2] = txtDiscount.getText();
+		if(isNullOrEmpty(arr,2)) {
+			sb.append("Discount should not be empty.");
+		}else if(!isFourDigit(arr,2)){
+			sb.append("Discount should be less than $9999.");
+		}
+		
+		arr[3] = txtDescription.getText();
+		
+		arr[4] = txtDisclaimer.getText();
+		
+		
+		arr[5] = txtYear.getText();
+		if(!isYear(arr,5)){
+			sb.append("Year should between 1900-2017.");
+		}
+		
+		arr[6] = txtMake.getText();
+		
+		arr[7] = txtModel.getText();
+		
+		arr[8] = txtPrice.getText();
+		if(!isNumberAndDot(arr,8)){
+			sb.append("Price should be numbers with no more than two decimals.");
+		}
+		
+		arr[9] = txtMileage.getText();
+		if(!isNumberAndDot(arr,9)){
+			sb.append("Mileage should be numbers with no more than two decimals.");
+		}
+		
+		
+		if (IsNullOrEmpty(sb)) {
+            throw new Exception(sb.toString());
+		}
+		
+		return ei;
+	}
+
+
+	private boolean IsNullOrEmpty(StringBuilder sb) {
+		if( sb ==null && sb.toString().isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+
+
+	private boolean isNumberAndDot(String[] arr, int i) {
+		if(Pattern.matches("^[0-9]+(.[0-9]{2})?$", arr[i])) {
+			return true;
+		}
+		return false;
+	}
+
+
+	private boolean isYear(String[] arr, int i) {
+		if(Pattern.matches("[1][9][0-9][0-9]|[2][0][0-1][0-7]", arr[i])) {
+			return true;
+		}
+		return false;
+	}
+
+
+	private boolean isFourDigit(String[] arr, int i) {
+		if(Pattern.matches("[0-9]{1,4}", arr[i])) {
+			return true;
+		}
+		return false;
+	}
+
+
+	private boolean isNullOrEmpty(String[] arr, int i) {
+		if(arr[i]==null && arr[i].isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+
+	public void itemStateChanged(ItemEvent e) {
+		if(e.getSource()=="cbCategory") {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				getCategory();
+				
+			}
+		}
+		
+		if(e.getSource()=="cbColor") {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				getColor();
+				
+			}
+		}
+		
+		if(e.getSource()=="cbType") {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				getTypes();
+				
+			}
+		}
+		
+		if(e.getSource()=="cbTrim") {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				getTrim();
+				
+			}
+		}
+	}
+	private EditIncentives getTrim() {
+		String[] arr = {};
+		EditIncentives ei = new EditIncentives(arr);
+		arr[13] = (String) cbCategory.getSelectedItem();
+		return ei;
+	}
+
+
+	private EditIncentives getTypes() {
+		String[] arr = {};
+		EditIncentives ei = new EditIncentives(arr);
+		arr[12] = (String) cbCategory.getSelectedItem();
+		return ei;
+	}
+
+
+	private EditIncentives getColor() {
+		String[] arr = {};
+		EditIncentives ei = new EditIncentives(arr);
+		arr[11] = (String) cbCategory.getSelectedItem();
+		return ei;
+	}
+
+
+	private  EditIncentives getCategory() {
+		String[] arr = {};
+		EditIncentives ei = new EditIncentives(arr);
+		arr[10] = (String) cbCategory.getSelectedItem();
+		return ei;
+	}
+	
+	
+	
+
 
 
 	public EditIncentivesFrame() {
 		initialize();
 	}
+	
+	
 
+	
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(30, 20, 1200, 700);
@@ -104,10 +305,10 @@ public class EditIncentivesFrame {
 		label.setBounds(100, 240, 10, 25);
 		leftPanel.add(label);
 		
-		txtDiscount1 = new JTextField();
-		txtDiscount1.setBounds(10, 240, 85, 25);
-		leftPanel.add(txtDiscount1);
-		txtDiscount1.setColumns(10);
+		txtDiscount = new JTextField();
+		txtDiscount.setBounds(10, 240, 85, 25);
+		leftPanel.add(txtDiscount);
+		txtDiscount.setColumns(10);
 		
 		//title
 		JLabel lblTitle = new JLabel("Title");
@@ -124,13 +325,13 @@ public class EditIncentivesFrame {
 		//description
 		JLabel lblDescription = new JLabel("Description:");
 		lblDescription.setFont(new Font("Arial", Font.BOLD, 16));
-		lblDescription.setBounds(10, 280, 105, 15);
+		lblDescription.setBounds(10, 300, 105, 15);
 		leftPanel.add(lblDescription);
 		
-		JTextArea txtDescriptions = new JTextArea();
-		txtDescriptions.setFont(new Font("Arial", Font.ITALIC, 12));
-		txtDescriptions.setBounds(20, 310, 420, 50);
-		leftPanel.add(txtDescriptions);
+		txtDescription = new JTextArea();
+		txtDescription.setFont(new Font("Arial", Font.ITALIC, 12));
+		txtDescription.setBounds(20, 330, 420, 25);
+		leftPanel.add(txtDescription);
 		
 		//disclaimer
 		JLabel lblDisclaimer = new JLabel("Disclaimer:");
@@ -138,9 +339,9 @@ public class EditIncentivesFrame {
 		lblDisclaimer.setBounds(10, 380, 105, 15);
 		leftPanel.add(lblDisclaimer);
 		
-		JTextArea txtDisclaimer = new JTextArea();
+		txtDisclaimer = new JTextArea();
 		txtDisclaimer.setFont(new Font("Arial", Font.ITALIC, 12));
-		txtDisclaimer.setBounds(20, 410, 420, 50);
+		txtDisclaimer.setBounds(20, 410, 420, 25);
 		leftPanel.add(txtDisclaimer);
 		
 		//incentive id
@@ -176,7 +377,7 @@ public class EditIncentivesFrame {
 		lblCategory.setBounds(35, 110, 68, 20);
 		rightPanel.add(lblCategory);
 		
-		JComboBox cbCategory = new JComboBox();
+		cbCategory = new JComboBox();
 		cbCategory.setBounds(120, 110, 150, 20);
 		rightPanel.add(cbCategory);
 		cbCategory.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -184,6 +385,8 @@ public class EditIncentivesFrame {
 				"New",
 				"Used",
 		}));
+		cbCategory.addItemListener((ItemListener) this);
+		
 		
 		
 		//year
@@ -228,7 +431,7 @@ public class EditIncentivesFrame {
 		lblTrim.setBounds(340, 210, 68, 20);
 		rightPanel.add(lblTrim);
 		
-		JComboBox cbTrim = new JComboBox();
+		cbTrim = new JComboBox();
 		cbTrim.setBounds(420, 210, 150, 20);
 		rightPanel.add(cbTrim);
 		cbTrim.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -237,7 +440,7 @@ public class EditIncentivesFrame {
 				"Mid",
 				"Base",
 		}));
-		
+		cbTrim.addItemListener((ItemListener) this);
 		
 		//color
 		JLabel lblColor = new JLabel("Color");
@@ -245,7 +448,7 @@ public class EditIncentivesFrame {
 		lblColor.setBounds(340, 110, 68, 20);
 		rightPanel.add(lblColor);
 		
-		JComboBox cbColor = new JComboBox();
+	    cbColor = new JComboBox();
 		cbColor.setBounds(420, 110, 150, 20);
 		rightPanel.add(cbColor);
 		cbColor.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -257,6 +460,7 @@ public class EditIncentivesFrame {
 				"Red",
 				"Yellow",
 		}));
+		cbColor.addItemListener((ItemListener) this);
 		
 		
 		//type
@@ -265,7 +469,7 @@ public class EditIncentivesFrame {
 		lblType.setBounds(340, 160, 68, 20);
 		rightPanel.add(lblType);
 		
-		JComboBox cbType = new JComboBox();
+		cbType = new JComboBox();
 		cbType.setBounds(420, 160, 150, 20);
 		rightPanel.add(cbType);
 		cbType.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -281,6 +485,7 @@ public class EditIncentivesFrame {
 				"Diesel",
 				"Crossover"
 		}));
+		cbType.addItemListener((ItemListener) this);
 		
 		
 		//price
@@ -289,7 +494,7 @@ public class EditIncentivesFrame {
 		lblPrice.setBounds(35, 310, 68, 20);
 		rightPanel.add(lblPrice);
 		
-		JComboBox cbPrice = new JComboBox();
+		cbPrice = new JComboBox();
 		cbPrice.setBounds(120, 310, 90, 20);
 		rightPanel.add(cbPrice);
 		cbPrice.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -298,11 +503,13 @@ public class EditIncentivesFrame {
 				">=",
 		}));
 		
+	
+		
 		txtPrice = new JTextField();
 		txtPrice.setBounds(220, 310, 100, 20);
 		rightPanel.add(txtPrice);
 		txtPrice.setColumns(10);
-		txtPrice.setEditable(false);
+		//txtPrice.setEditable(false);
 		
 		
 		//mileage
@@ -311,7 +518,7 @@ public class EditIncentivesFrame {
 		lblMileage.setBounds(36, 360, 68, 20);
 		rightPanel.add(lblMileage);
 		
-		JComboBox cbMileage = new JComboBox();
+		cbMileage = new JComboBox();
 		cbMileage.setBounds(120, 360, 90, 20);
 		rightPanel.add(cbMileage);
 		cbMileage.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -324,13 +531,18 @@ public class EditIncentivesFrame {
 		txtMileage.setBounds(220, 360, 100, 20);
 		rightPanel.add(txtMileage);
 		txtMileage.setColumns(10);
-		txtMileage.setEditable(false);
+		//txtMileage.setEditable(false);
 		
 		
 		//apply button
-		JButton applyBtn = new JButton("Apply");
+		applyBtn = new JButton("Apply");
 		applyBtn.setBounds(280, 420, 93, 23);
 		rightPanel.add(applyBtn);
+		applyBtn.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e) {
+			    applyClicked(e);
+			}
+		});
 		
 		//top panel
 		JPanel topPanel = new JPanel();
@@ -342,6 +554,7 @@ public class EditIncentivesFrame {
 		topPanel.add(lblTopTitle);
 		
 	}
+
 
 }
 
