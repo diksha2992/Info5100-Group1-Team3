@@ -7,9 +7,52 @@ public class IncentiveScreen extends JFrame{
 
     private static JFrame mainFrame;
     private JPanel headerPanel;
-    private JPanel footerPanel;
     private JPanel filterPanel;
+    private JPanel toolPanel;
     private JPanel listPanel;
+
+    // GridBadConstraints shortcut methods
+    public class GBC extends GridBagConstraints {
+
+        public GBC(int gridx, int gridy) {
+            this.gridx = gridx;
+            this.gridy = gridy;
+        }
+
+        public GBC(int gridx, int gridy, int gridwidth, int gridheight) {
+            this.gridx = gridx;
+            this.gridy = gridy;
+            this.gridwidth = gridwidth;
+            this.gridheight = gridheight;
+        }
+
+        public GBC setAnchor(int anchor) {
+            this.anchor = anchor;
+            return this;
+        }
+
+        public GBC setFill(int fill) {
+            this.fill = fill;
+            return this;
+        }
+
+        public GBC setWeight(double weightx, double weighty) {
+            this.weightx = weightx;
+            this.weighty = weighty;
+            return this;
+        }
+
+        public GBC setInsets(int top, int left, int bottom, int right) {
+            this.insets = new Insets(top, left, bottom, right);
+            return this;
+        }
+
+        public GBC setIpad(int ipadx, int ipady) {
+            this.ipadx = ipadx;
+            this.ipady = ipady;
+            return this;
+        }
+    }
 
     public IncentiveScreen() {
         mainFrame = new JFrame();
@@ -20,19 +63,18 @@ public class IncentiveScreen extends JFrame{
         makeThisVisible();
     }
 
+
     private void initialize() {
         mainFrame.setTitle("Incentive Management");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setBackground(Color.lightGray);
-        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setLayout(new GridBagLayout());
     }
 
     public void createComponents() {
         headerPanel = new JPanel();
-        footerPanel = new JPanel();
         filterPanel = new JPanel();
+        toolPanel = new JPanel();
         listPanel = new JPanel();
-        listPanel.setLayout(new GridLayout(2, 1, 10, 10));
     }
 
     public void addComponents() {
@@ -43,65 +85,44 @@ public class IncentiveScreen extends JFrame{
         headerPanel.add(headerTitle);
         headerPanel.add(inventoryButton);
         headerPanel.add(incentiveButton);
-        mainFrame.add(headerPanel, BorderLayout.NORTH);
-
-        // Footer
-        JLabel footerTitle = new JLabel("This is footer");
-        footerPanel.add(footerTitle);
-        mainFrame.add(footerPanel, BorderLayout.SOUTH);
+        headerPanel.setBackground(Color.yellow);
+        mainFrame.add(headerPanel, new GBC(0, 0, 2, 1));
 
         // Filter
         JLabel filterTitle = new JLabel("Filter");
         filterPanel.add(filterTitle);
-        mainFrame.add(filterPanel, BorderLayout.WEST);
+        filterPanel.setBackground(Color.cyan);
+        mainFrame.add(filterPanel, new GBC(0, 1, 1, 2).setAnchor(GBC.WEST).setIpad(200, 500));
+
+        // Tool
+        JButton addButton = new JButton("Add");
+        addButton.setPreferredSize(new Dimension(100,20));
+        JLabel searchBar = new JLabel("SEARCH");
+        toolPanel.add(addButton);
+        toolPanel.add(searchBar);
+        toolPanel.setBackground(Color.pink);
+        mainFrame.add(toolPanel, new GBC(1,1).setAnchor(GBC.WEST));
 
         // List
-        JLabel listTitle = new JLabel("List");
-        JButton addButton = new JButton("Add");
-        addButton.setPreferredSize(new Dimension(100,50));
-        JPanel records = new JPanel();
-        records.setBackground(Color.gray);
-        records.setLayout(new GridLayout(5, 3, 5, 5));
+        listPanel.setBackground(Color.green);
+        listPanel.setLayout(new GridLayout(5, 3, 5, 5));
+        createAndAddIncentiveRecord("description1");
+        createAndAddIncentiveRecord("description2");
+        createAndAddIncentiveRecord("description3");
+        createAndAddIncentiveRecord("description4");
+        createAndAddIncentiveRecord("description5");
+        mainFrame.add(listPanel, new GBC(1, 2));
 
-        JLabel desp1 = new JLabel("Description1");
-        JButton editButton1 = new JButton("Edit");
-        JButton deleteButton1 = new JButton("Delete");
-        records.add(desp1);
-        records.add(editButton1);
-        records.add(deleteButton1);
+    }
 
-        JLabel desp2 = new JLabel("Description2");
-        JButton editButton2 = new JButton("Edit");
-        JButton deleteButton2 = new JButton("Delete");
-        records.add(desp2);
-        records.add(editButton2);
-        records.add(deleteButton2);
-
-        JLabel desp3 = new JLabel("Description3");
-        JButton editButton3 = new JButton("Edit");
-        JButton deleteButton3 = new JButton("Delete");
-        records.add(desp3);
-        records.add(editButton3);
-        records.add(deleteButton3);
-
-        JLabel desp4 = new JLabel("Description4");
-        JButton editButton4 = new JButton("Edit");
-        JButton deleteButton4 = new JButton("Delete");
-        records.add(desp4);
-        records.add(editButton4);
-        records.add(deleteButton4);
-
-        JLabel desp5 = new JLabel("Description5");
-        JButton editButton5 = new JButton("Edit");
-        JButton deleteButton5 = new JButton("Delete");
-        records.add(desp5);
-        records.add(editButton5);
-        records.add(deleteButton5);
-
-        listPanel.add(addButton);
-        listPanel.add(records);
-        mainFrame.add(listPanel, BorderLayout.CENTER);
-
+    // This method will be replaced by receiving an Incentive class
+    public void createAndAddIncentiveRecord(String description) {
+        JLabel desp = new JLabel(description);
+        JButton editButton = new JButton("Edit");
+        JButton deleteButton = new JButton("Delete");
+        listPanel.add(desp);
+        listPanel.add(editButton);
+        listPanel.add(deleteButton);
     }
 
     public void addListeners() {
