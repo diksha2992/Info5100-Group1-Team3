@@ -63,11 +63,11 @@ public class IncentiveScreen extends JFrame{
         makeThisVisible();
     }
 
-
     private void initialize() {
         mainFrame.setTitle("Incentive Management");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setLayout(new GridBagLayout());
+        mainFrame.setSize(1280, 700);
     }
 
     public void createComponents() {
@@ -85,14 +85,15 @@ public class IncentiveScreen extends JFrame{
         headerPanel.add(headerTitle);
         headerPanel.add(inventoryButton);
         headerPanel.add(incentiveButton);
-        headerPanel.setBackground(Color.yellow);
-        mainFrame.add(headerPanel, new GBC(0, 0, 2, 1));
+        headerPanel.setBackground(Color.lightGray);
+        headerPanel.setPreferredSize(new Dimension(1280, 100));
+        mainFrame.add(headerPanel, new GBC(0, 0, 2, 1).setFill(GBC.BOTH));
 
         // Filter
         JLabel filterTitle = new JLabel("Filter");
         filterPanel.add(filterTitle);
-        filterPanel.setBackground(Color.cyan);
-        mainFrame.add(filterPanel, new GBC(0, 1, 1, 2).setAnchor(GBC.WEST).setIpad(200, 500));
+        filterPanel.setBackground(Color.white);
+        mainFrame.add(filterPanel, new GBC(0, 1, 1, 2).setAnchor(GBC.WEST).setIpad(200, 500).setFill(GBC.BOTH));
 
         // Tool
         JButton addButton = new JButton("Add");
@@ -100,20 +101,36 @@ public class IncentiveScreen extends JFrame{
         JLabel searchBar = new JLabel("SEARCH");
         toolPanel.add(addButton);
         toolPanel.add(searchBar);
-        toolPanel.setBackground(Color.pink);
-        mainFrame.add(toolPanel, new GBC(1,1).setAnchor(GBC.WEST));
+        toolPanel.setBackground(Color.lightGray);
+        mainFrame.add(toolPanel, new GBC(1,1).setAnchor(GBC.WEST).setFill(GBC.BOTH));
 
         // List
-        listPanel.setBackground(Color.green);
+        listPanel.setBackground(Color.lightGray);
         listPanel.setLayout(new GridLayout(5, 3, 5, 5));
         createAndAddIncentiveRecord("description1");
         createAndAddIncentiveRecord("description2");
         createAndAddIncentiveRecord("description3");
         createAndAddIncentiveRecord("description4");
         createAndAddIncentiveRecord("description5");
-        mainFrame.add(listPanel, new GBC(1, 2));
+        mainFrame.add(listPanel, new GBC(1, 2).setFill(GBC.BOTH));
 
     }
+
+    /*
+    // Create incentive records table
+    public void createAndAddTable() {
+        // Create column names
+        String[] columnNames = {"Description"};
+
+        // Test data
+        Object[][] data = {{"Des1"}, {"Des2"}, {"Des3"}, {"Des4"}, {"Des5"}};
+
+        JTable table = new JTable(data, columnNames);
+        table.setBackground(Color.lightGray);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+    }
+    */
 
     // This method will be replaced by receiving an Incentive class
     public void createAndAddIncentiveRecord(String description) {
@@ -131,7 +148,6 @@ public class IncentiveScreen extends JFrame{
 
     private void makeThisVisible()
     {
-        mainFrame.setSize(1280, 700);
         mainFrame.setVisible(true);
     }
 
