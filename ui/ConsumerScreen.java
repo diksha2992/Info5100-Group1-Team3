@@ -1,30 +1,28 @@
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class ConsumerScreen {
+public class ConsumerScreen extends UI {
 
     private JFrame mainFrame;
     private JLabel headerLabel;
-    private JLabel footerLabel;
     private JLabel distanceLabel;
-    private JLabel statusLabel;
     private JPanel controlPanel;
     private JComboBox<String> chooseDealer;
 
+    public ConsumerScreen() {
+        super();
+    }
+
     public static void main(String[] args) throws IOException {
-        ConsumerScreen  welcome = new ConsumerScreen();
-        welcome.createUI();
+        ConsumerScreen  consumerScreen = new ConsumerScreen();
+        consumerScreen.createUI();
     }
 
     public void createUI() throws IOException {
@@ -32,20 +30,18 @@ public class ConsumerScreen {
         prepareGUI();
 
         JPanel distanceNestedPanel = new JPanel();
-        JLabel distanceTextLabel = new JLabel("Show dealers within distance (mi):", JLabel.CENTER);
-        distanceTextLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+        JLabel distanceTextLabel = createLabel("Show dealers within distance (mi):", JLabel.CENTER);
         JSlider slider = getSlider();
-//        distanceNestedPanel.add(imageLabel);
         distanceNestedPanel.add(distanceTextLabel);
         distanceNestedPanel.add(slider);
         distanceNestedPanel.add(distanceLabel);
 
         JPanel dealersListNestedPanel = new JPanel();
-        JLabel label = new JLabel("Select Dealer:",JLabel.CENTER);
+        JLabel label = createLabel("Select Dealer:", JLabel.CENTER);
         label.setFont(new Font("Arial", Font.PLAIN, 40));
-        JComboBox<String> dealersComboBox = getDealersComboBox();
+        chooseDealer = getDealersComboBox();
         dealersListNestedPanel.add(label);
-        dealersListNestedPanel.add(dealersComboBox);
+        dealersListNestedPanel.add(chooseDealer);
 
         JPanel submitNestedPanel = new JPanel();
         JButton submitButton = getSubmitButton();
@@ -56,80 +52,50 @@ public class ConsumerScreen {
         outer.add(dealersListNestedPanel);
         outer.add(submitNestedPanel);
 
-
         controlPanel.add(outer);
         mainFrame.setVisible(true);
     }
 
     private void prepareGUI() throws IOException {
-        mainFrame = new JFrame("Welcome User");
-        mainFrame.setSize(2500,2000);
+        mainFrame = createFrame("Welcome User");
         mainFrame.setLayout(new GridLayout(3, 2));
-
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-        }
-
 
         JPanel imageNestedPanel = new JPanel();
         imageNestedPanel.setLayout(new GridLayout(2,1));
-        JLabel imageLabel = pictures();
-        imageNestedPanel.add(imageLabel);
 
-        headerLabel = new JLabel("Welcome to your dream car site!", JLabel.CENTER);
+        JLabel imageLabel = pictures();
+
+        headerLabel = createLabel("Welcome to your dream car site!", JLabel.CENTER);
+        headerLabel.setHorizontalAlignment(JLabel.CENTER);
         headerLabel.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 100));
 
+        imageNestedPanel.add(imageLabel);
         imageNestedPanel.add(headerLabel);
 
-        statusLabel = new JLabel("", JLabel.CENTER);
-        statusLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-
-        distanceLabel = new JLabel("", JLabel.CENTER);
-        distanceLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-
-        footerLabel = new JLabel("", JLabel.CENTER);
+        distanceLabel = createLabel("", JLabel.CENTER);
 
         controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout() );
+        controlPanel.setLayout(new FlowLayout());
 
         mainFrame.add(imageNestedPanel);
-//        mainFrame.add(headerLabel);
         mainFrame.add(controlPanel);
-        mainFrame.add(statusLabel);
         mainFrame.setVisible(true);
     }
 
     private JButton getSubmitButton() {
 
-        JButton submitButton = new JButton("Submit");
+        JButton submitButton = createButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                statusLabel.setText("Dealer: "+chooseDealer.getSelectedItem()+" is selected.");
             }
         });
 
-        submitButton.setFont(new Font("Arial", Font.PLAIN, 36));
-        submitButton.setPreferredSize(new Dimension(350, 100));
         return submitButton;
     }
 
     private JComboBox<String> getDealersComboBox(){
         String [] dealers = new String[]{"SeattleAudi","HondaBellevue"};
-        chooseDealer   = new JComboBox<>(dealers);
-        chooseDealer.setPreferredSize(new Dimension(600, 50));
-        chooseDealer.setForeground(Color.BLACK);
-        chooseDealer.setFont(new Font("Arial", Font.PLAIN, 36));
-
-        return chooseDealer;
+        return createComboBox(dealers);
     }
 
     private JSlider getSlider() {
@@ -161,16 +127,10 @@ public class ConsumerScreen {
         });
 
         return slider;
-
-
     }
+
     private JLabel pictures() throws IOException{
-        JLabel picLabel = new JLabel(new ImageIcon("C:\\Users\\diksh\\Desktop\\image.jpg"));
-//        picLabel.setSize(new Dimension(500, 200));
-
-//        picLabel.setBounds(100, 200, 2000, 800);
-
+        JLabel picLabel = createPicture("C:\\Users\\diksh\\Desktop\\image.jpg");
         return picLabel;
     }
 }
-
