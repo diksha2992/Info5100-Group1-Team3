@@ -1,4 +1,6 @@
 
+package com.neuSep17.ui;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -13,6 +15,8 @@ public class UI {
         Dimension screenSize = kit.getScreenSize();
         screenWidth = screenSize.width;
         screenHeight = screenSize.height;
+
+        System.out.println("width: "+screenWidth+": "+screenHeight);
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -53,36 +57,39 @@ public class UI {
 
     public JButton createButton(String text) {
         JButton jButton = new JButton(text);
-        jButton.setSize(200, 40);
-        jButton.setFont(new Font("Arial", Font.PLAIN, 36));
+//        jButton.setPreferredSize(new Dimension(screenWidth/20, screenHeight/30));
+        jButton.setFont(new Font("Arial", Font.PLAIN, screenWidth/100));
         return jButton;
     }
 
     public JComboBox createComboBox(String[] items){
         JComboBox jComboBox = new JComboBox(items);
-        jComboBox.setSize(100,40);
-        jComboBox.setFont(new Font("Arial", Font.PLAIN, 36));
+        jComboBox.setFont(new Font("Arial", Font.PLAIN, screenWidth/100));
         return jComboBox;
     }
 
-    public JLabel createLabel(String text, int horizontalAlignment){
-        JLabel jLabel = new JLabel(text, horizontalAlignment);
-        jLabel.setSize(20,30);
-        jLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+    public JLabel createLabel(String text) {
+        JLabel jLabel = new JLabel(text);
+        jLabel.setFont(new Font("Arial", Font.PLAIN, screenWidth/100));
         return jLabel;
-
     }
 
-    public TextField createText(String text){
-        TextField textField = new TextField(text);
-        textField.setSize(20,50);
+    public JLabel createLabel(String text, int horizontalAlignment){
+        JLabel jLabel = createLabel(text);
+        jLabel.setHorizontalAlignment(horizontalAlignment);
+        return jLabel;
+    }
+
+    public JTextField createText(String text){
+        JTextField textField = new JTextField(text);
+        textField.setSize(screenWidth/200,screenHeight*2/100);
         return textField;
     }
 
     public JLabel createPicture(String path) throws IOException{
         JLabel picLabel = new JLabel(new ImageIcon(path));
-        picLabel.setSize(new Dimension(500, 200));
-        picLabel.setBounds(100, 200, 2000, 800);
+        picLabel.setSize(new Dimension(screenWidth/10, screenHeight/10));
+        picLabel.setBounds(screenWidth/30, screenHeight/10, screenWidth/2, screenHeight/3);
         return picLabel;
     }
 }
