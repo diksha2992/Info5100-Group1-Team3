@@ -1,8 +1,12 @@
 //package com.neuSep17.ui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 class DealerScreen extends JFrame {
     public DealerScreen() {
@@ -20,6 +24,30 @@ class DealerScreen extends JFrame {
 
         }
     }
+
+    public class Background extends JPanel {
+
+        private BufferedImage backgroundImage;
+
+        public Background() throws IOException {
+            this.backgroundImage = ImageIO.read(new File("C:\\Users\\nisha\\Desktop\\car-makers.jpg"));
+            setLayout(new BorderLayout());
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return backgroundImage == null ? new Dimension(200, 200) : new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight());
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, this);
+        }
+    }
+
+
+
 
     private void manageIncentivesButtonActionPerformed(ActionEvent e) {
         // TODO
